@@ -22,17 +22,14 @@ def error_for_todo(todo):
 
 def delete_todo_by_id(todo_id, lst):
     lst['todos'] = [todo for todo in lst['todos'] if todo['id'] != todo_id]
-    return None
 
 def complete_todos(lst):
     for todo in lst["todos"]:
         if not todo["completed"]:
             todo["completed"] = True
-    return None
 
 def delete_todo_list(list_id, session):
     session["lists"] = [lst for lst in session["lists"] if lst["id"] != list_id]
-    return None
 
 def todos_remaining(lst):
     return sum(1 for todo in lst["todos"] if not todo["completed"])
@@ -44,11 +41,13 @@ def is_todo_completed(todo):
     return todo['completed']
 
 def sort_items(items, select_completed):
-    sorted_items = sorted(items, key=lambda item: item['title'].lower())
+    incomplete_items = []
+    complete_items = []
 
-    incomplete_items = [item for item in sorted_items
-                        if not select_completed(item)]
-    complete_items = [item for item in sorted_items
-                      if select_completed(item)]
+    for item in sorted(items, key=lambda item: item['title'].lower()):
+        if select_completed(item):
+            complete_items.append(item)
+        else:
+            incomplete_items.append(item)
 
     return incomplete_items + complete_items

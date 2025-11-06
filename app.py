@@ -102,7 +102,7 @@ def add_todo(lst, list_id):
     error = error_for_todo(todo)
     if error:
         flash(error, "error")
-        return render_template("list.html", lst=lst)
+        return render_template("list.html", lst=lst, todo=todo)
 
     lst["todos"].append({
         "id": str(uuid4()),
@@ -119,11 +119,11 @@ def add_todo(lst, list_id):
 def toggle_todo(lst, todo, list_id, todo_id):
     todo["completed"] = not todo["completed"]
 
-    flash("Todo marked completed.", "success") if todo["completed"] else flash("Todo marked incompleted.", "sucess")
+    flash("Todo marked completed.", "success") if todo["completed"] else flash("Todo marked incompleted.", "success")
     session.modified = True
     return redirect(url_for("show_list", list_id=list_id))
 
-@app.route("/lists/<list_id>/todos/{<todo_id>/delete", methods=["POST"])
+@app.route("/lists/<list_id>/todos/<todo_id>/delete", methods=["POST"])
 @require_todo
 def delete_todo(lst, todo, list_id, todo_id):
     delete_todo_by_id(todo_id, lst)
